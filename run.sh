@@ -10,6 +10,8 @@ UDID=$(xcrun simctl list devices |
        grep -Eo "[0-9A-Fa-f-]{36}" | # extract UUID
        head -1)
 
+echo "📱 Using simulator: $UDID"
+
 echo "🧪 Running UI tests..."
 rm -rf TestResults.xcresult
 xcodebuild test \
