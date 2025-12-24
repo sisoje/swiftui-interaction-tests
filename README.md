@@ -34,6 +34,8 @@ sh run.sh
 
 The script generates the Xcode project with XcodeGen, picks the first available iPhone simulator, and runs UI tests.
 
+To test your own package, uncomment the `packages` section in `project.yml`.
+
 ## Structure
 
 - `SharedCode/` - `TestView` struct and extensions (shared between app and tests)
@@ -42,8 +44,30 @@ The script generates the Xcode project with XcodeGen, picks the first available 
 - `Snapshots/` - Interaction log snapshots for verification
 - `project.yml` - XcodeGen project definition
 
+## Extending
+
+Add view types in `SharedCode/TestView.swift`:
+
+```swift
+enum ViewBody: Codable {
+    case button(text: String)
+    case yourType(param: String)
+}
+```
+
+Implement in `AppCode/TestView+View.swift`:
+
+```swift
+case let .yourType(param):
+    YourView(param) {
+        try! logFile.append("action")
+    }
+```
+
+Update snapshots: delete the file in `Snapshots/`, rerun test.
+
 ## Requirements
 
 - macOS
 - Xcode
-- Swift 6.2+
+- Swift 6.0+
