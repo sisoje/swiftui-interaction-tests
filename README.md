@@ -12,7 +12,7 @@ Runs in an XCTest UI test target, but it does not check visuals/screenshots. Sna
 
 A SwiftUI `View` is a data struct, not a view object. The `body` is a computed property that recomposes data into new view values. The framework handles rendering (imperative shell), so the `View` IS the functional core.
 
-By capturing the sequence of actions, these tests verify how initial state behaves through the entire data flow.
+By capturing the sequence of actions, these tests verify how initial state behaves through the entire data flow. By strict TDD definitions, this is a unit test — but it runs through UI testing to activate the SwiftUI runtime.
 
 ## How It Works
 
@@ -26,6 +26,8 @@ This is **action snapshot testing**:
 Similar to Jest snapshots or Swift Snapshot Testing, but for **actions** instead of visual/data output.
 
 **Implementation:**
+
+UI tests run in a separate process from the app. We use `Codable` to serialize the entire view and pass it via environment variable. We use text files for snapshots because both processes can access the filesystem.
 
 1. Tests define `TestView` with a `ViewBody` (e.g., `.button(text: "demo")`)
 2. App launches with the view passed via environment variable
